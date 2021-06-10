@@ -36,11 +36,11 @@ exports.getReport = async (req, res) => {
     }
   });
   let Rank = {
-    poor: poor,
-    good: good,
-    fair: fair,
     elite: elite,
     excellent: excellent,
+    good: good,
+    fair: fair,
+    poor: poor,
   };
   return res.status(200).send({
     success: true,
@@ -49,34 +49,28 @@ exports.getReport = async (req, res) => {
   });
 };
 
-exports.getUser = async (req, res) => {
-  // let name = [];
-  // let rank=0
-  const scorer = req.body.name;
-  const scoreOfUser = req.body.score;
-  const scorerIndex = scorers.indexOf(scorer);
-  const userIndex = scores.indexOf(parseInt(scoreOfUser));
-  let array = [scorer, scoreOfUser];
-
+exports.getUserRecord = async (req, res) => {
+  let array = [];
   try {
-    if (scorerIndex != userIndex) {
-      return res
-        .status(400)
-        .send({ success: false, message: "conditions not matched" });
-    } else if (scoreOfUser > 0 && scoreOfUser <= 300) {
-      array.push("Poor");
-    } else if (scoreOfUser > 300 && scoreOfUser <= 500) {
-      array.push("Fair");
-    } else if (scoreOfUser > 500 && scoreOfUser <= 650) {
-      array.push("Good");
-    } else if (scoreOfUser > 650 && scoreOfUser <= 750) {
-      array.push("Excellent");
-    } else if (scoreOfUser > 750 && scoreOfUser <= 800) {
-      array.push("Elite");
-    }
-
-    // console.log(grading);
-    return res.send(array);
+    scores.map((score) => {
+      //console.log(score);
+      scorers.map((name) => {
+        if (scores.indexOf(score) == scorers.indexOf(name)) {
+          if (score > 0 && score <= 300) {
+            array.push({ name: name, score: score, Rank: "Poor" });
+          } else if (score > 300 && score <= 500) {
+            array.push({ name: name, score: score, Rank: "Fair" });
+          } else if (score > 500 && score <= 650) {
+            array.push({ name: name, score: score, Rank: "Good" });
+          } else if (score > 650 && score <= 750) {
+            array.push({ name: name, score: score, Rank: "Excellent" });
+          } else if (score > 750 && score <= 800) {
+            array.push({ name: name, score: score, Rank: "Elite" });
+          }
+        }
+      });
+    });
+    return res.status(200).send(array);
   } catch (error) {
     return res.status(400).send(error);
   }
@@ -95,15 +89,15 @@ exports.getUserRank = async (req, res) => {
         .status(400)
         .send({ success: false, message: "conditions not matched" });
     } else if (scoreOfUser > 0 && scoreOfUser <= 300) {
-      array.push("Poor");
+      array.push({ Rank: "Poor" });
     } else if (scoreOfUser > 300 && scoreOfUser <= 500) {
-      array.push("Fair");
+      array.push({ Rnk: "Fair" });
     } else if (scoreOfUser > 500 && scoreOfUser <= 650) {
-      array.push("Good");
+      array.push({ Rank: "Good" });
     } else if (scoreOfUser > 650 && scoreOfUser <= 750) {
-      array.push("Excellent");
+      array.push({ Rank: "Excellent" });
     } else if (scoreOfUser > 750 && scoreOfUser <= 800) {
-      array.push("Elite");
+      array.push({ Rank: "Elite" });
     }
 
     // console.log(grading);
